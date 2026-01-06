@@ -18,7 +18,7 @@ const Footer = styled(Box)(({ theme }) => ({
 export default function MainLayout() {
     return (
         <>
-            <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", bgcolor: "#f2f8fc" }}>
+            <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", bgcolor: "#F1FAFE" }}>
                 <Navbar />
 
                 <Box sx={{ display: "flex", flex: 1, px: 3, py: 2, gap: 4 }}>

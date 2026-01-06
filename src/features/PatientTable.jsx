@@ -25,7 +25,7 @@ const StyledTableContainer = styled(TableContainer)({
     boxShadow: "none",
     border: "1px solid #edf2f7",
     backgroundColor: "#ffffff",
-    padding: "32px",
+    padding: "24px",
     marginTop: "24px",
 })
 
@@ -84,7 +84,7 @@ const patients = [
 export default function PatientTable() {
     return (
         <StyledTableContainer component={Paper} elevation={0}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4, gap: 2 }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, gap: 2 }}>
                 <TextField
                     placeholder="Search"
                     size="small"
@@ -137,7 +137,7 @@ export default function PatientTable() {
                 <TableBody>
                     {patients.map((row, index) => (
                         <TableRow key={index} sx={{ "& td": { borderBottom: "1.5px solid #f7fafc", border: '1px solid #edf2f7' } }}>
-                            <TableCell sx={{ py: 2.5 }}>
+                            <TableCell sx={{ py: 2 }}>
                                 <Typography variant="subtitle2" sx={{ fontWeight: 600, color: "#1a202c" }}>
                                     {row.name}
                                 </Typography>

@@ -36,7 +36,7 @@ export default function AddPrescriptionModal({ open, onClose }) {
                     alignItems: "center",
                 }}
             >
-                <Typography sx={{ fontSize: "1.125rem", fontWeight: 500 }}>Add Health History</Typography>
+                <Typography sx={{ fontSize: "1.125rem", fontWeight: 500 }}>Add Prescription</Typography>
                 <Box sx={{ display: "flex", gap: 1 }}>
                     <Button
                         onClick={onClose}
@@ -74,7 +74,7 @@ export default function AddPrescriptionModal({ open, onClose }) {
             <DialogContent sx={{ p: 3, backgroundColor: "#FAFAFA" }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5, mt: 3 }}>
                     <Box>
-                        <Typography sx={{ mb: 1, fontSize: "0.875rem", fontWeight: 500, color: "#424242" }}>Doctor*</Typography>
+                        <Typography sx={{ mb: 1, fontSize: "0.875rem", fontWeight: 500, color: "#424242" }}>Medicine*</Typography>
                         <FormControl fullWidth>
                             <Select IconComponent={KeyboardArrowDownIcon}
                                 defaultValue=""
@@ -95,14 +95,35 @@ export default function AddPrescriptionModal({ open, onClose }) {
                             </Select>
                         </FormControl>
                     </Box>
-
+                    <Box>
+                        <Typography sx={{ mb: 1, fontSize: "0.875rem", fontWeight: 500, color: "#424242" }}>Brand*</Typography>
+                        <FormControl fullWidth>
+                            <Select IconComponent={KeyboardArrowDownIcon}
+                                defaultValue=""
+                                displayEmpty
+                                sx={{
+                                    borderRadius: 2,
+                                    backgroundColor: "#E0E0E0",
+                                    "& .MuiOutlinedInput-notchedOutline": {
+                                        border: "none",
+                                    },
+                                }}
+                            >
+                                <MenuItem value="" disabled>
+                                    Select
+                                </MenuItem>
+                                <MenuItem value="dr-smith">Dr. Smith</MenuItem>
+                                <MenuItem value="dr-johnson">Dr. Johnson</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
                     <Box>
                         <Typography sx={{ mb: 1, fontSize: "0.875rem", fontWeight: 500, color: "#424242" }}>
                             Description*
                         </Typography>
                         <TextField
                             multiline
-                            rows={4}
+                            rows={2}
                             fullWidth
                             placeholder=""
                             sx={{

@@ -4,7 +4,7 @@ import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined"
 import CampaignOutlinedIcon from "@mui/icons-material/CampaignOutlined"
 import MonitorOutlinedIcon from "@mui/icons-material/MonitorOutlined"
 import { FaStethoscope } from "react-icons/fa"
-import { LuChartLine, LuContactRound, LuLayoutDashboard, LuPill, LuReceipt, LuUsersRound } from "react-icons/lu"
+import { LuChartLine, LuContactRound, LuLayoutDashboard, LuPill, LuReceipt, LuUserRoundCog, LuUsersRound } from "react-icons/lu"
 import { RiFilePaper2Line } from "react-icons/ri"
 import theme from "../config/ThemeProvider"
 import { Link, useLocation } from "react-router-dom"
@@ -55,9 +55,9 @@ export default function Sidebar() {
         { icon: FaStethoscope, path: "/provider-management" },
         { icon: LuPill, path: '/medicine-inventory' },
         { icon: LuUsersRound, path: "/patient-management" },
-        { icon: RiFilePaper2Line },
+        { icon: RiFilePaper2Line, path: "/orders" },
         { icon: LuReceipt },
-        { icon: LuReceipt },
+        { icon: LuUserRoundCog, path: "/sub-admin" },
         { icon: FactCheckOutlinedIcon },
         { icon: ShieldOutlinedIcon },
         { icon: CampaignOutlinedIcon },

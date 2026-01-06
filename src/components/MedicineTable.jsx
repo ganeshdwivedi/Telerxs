@@ -26,6 +26,8 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline"
 import AccessTimeIcon from "@mui/icons-material/AccessTime"
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined"
 import { FiCheckCircle } from "react-icons/fi"
+import AddMedicineModal from "../features/AddMedicineModale";
+import { useState } from "react";
 
 
 
@@ -82,7 +84,7 @@ const StyledTableContainer = styled(TableContainer)({
     boxShadow: "none",
     border: "1px solid #edf2f7",
     backgroundColor: "#ffffff",
-    padding: "32px",
+    padding: "24px",
     marginTop: "24px",
 })
 
@@ -178,6 +180,19 @@ const medicines = [
 ]
 
 export default function MedicineTable() {
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const handleOpen = () => {
+        setModalOpen(true);
+    };
+
+    const handleClose = () => {
+        setModalOpen(false);
+    };
+
+    const handleSubmit = (data) => {
+        console.log("Submitted Medicine Data:", data);
+    };
     return (
         <StyledTableContainer component={Paper} elevation={0}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4, gap: 2 }}>
@@ -218,6 +233,7 @@ export default function MedicineTable() {
                         Filter
                     </Button>
                     <Button
+                        onClick={handleOpen}
                         variant="contained"
                         startIcon={<AddIcon />}
                         sx={{
@@ -322,6 +338,7 @@ export default function MedicineTable() {
                     ))}
                 </TableBody>
             </Table>
+            <AddMedicineModal open={modalOpen} onClose={handleClose} onSubmit={handleSubmit} />
         </StyledTableContainer>
     )
 }

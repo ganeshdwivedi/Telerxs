@@ -26,6 +26,10 @@ import StarIcon from "@mui/icons-material/Star"
 import HighlightOffIcon from "@mui/icons-material/HighlightOff"
 import { FiCheckCircle } from "react-icons/fi"
 import { CiMoneyBill } from "react-icons/ci"
+import AddDoctorModal from "./AddDoctorModale"
+import { useState } from "react"
+import ResetPasswordModal from "./ResetPassword"
+import ProcessPayoutModal from "./ProcessPayoutModal"
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
     borderRadius: "12px",
@@ -130,9 +134,40 @@ const providers = [
 ]
 
 export default function ProviderTable() {
+    const [open, setOpen] = useState(false); // state for adding doctor modal
+    const [payoutModalOpen, setPayoutModalOpen] = useState(false); // state for payout modal
+
+
+    const [openResetPassword, setOpenResetPassword] = useState(false); // state for reset password modal
+    const handleClose = () => {
+        setOpen(false);
+    }
+    const handleOpen = () => {
+        setOpen(true);
+    }
+    const handleSubmit = (data) => {
+        console.log("New Doctor Data:", data);
+        handleClose();
+    };
+
+    const handleOpenResetPassword = () => {
+        setOpenResetPassword(true);
+    };
+
+    const handleCloseResetPassword = () => {
+        setOpenResetPassword(false);
+    };
+
+    const handlePayoutClose = () => {
+        setPayoutModalOpen(false);
+    };
+    const handlePayoutOpen = () => {
+        setPayoutModalOpen(true);
+    };
+
     return (
         <StyledTableContainer component={Paper} elevation={0}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4 }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
                 <TextField
                     placeholder="Search"
                     size="small"
@@ -154,6 +189,7 @@ export default function ProviderTable() {
                     }}
                 />
                 <Button
+                    onClick={handleOpen}
                     variant="contained"
                     startIcon={<AddIcon />}
                     sx={{
@@ -245,14 +281,14 @@ export default function ProviderTable() {
                             </TableCell>
                             <TableCell align="right">
                                 <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
-                                    <ActionButton size="small">
+                                    <ActionButton onClick={handleOpen} size="small">
                                         <EditOutlinedIcon fontSize="small" />
                                     </ActionButton>
-                                    <ActionButton size="small">
+                                    <ActionButton onClick={handleOpenResetPassword} size="small">
                                         <LockOutlinedIcon fontSize="small" />
                                     </ActionButton>
-                                    <ActionButton size="small">
-                                        <CiMoneyBill fontSize="small" />
+                                    <ActionButton onClick={handlePayoutOpen} size="small">
+                                        <CiMoneyBill fontSize="large" />
                                     </ActionButton>
                                 </Box>
                             </TableCell>
@@ -260,6 +296,9 @@ export default function ProviderTable() {
                     ))}
                 </TableBody>
             </Table>
+            <AddDoctorModal onClose={handleClose} onSubmit={handleSubmit} open={open} />
+            <ResetPasswordModal doctorName={'Dr. Sarah Jenkins'} onSubmit={handleSubmit} onClose={handleCloseResetPassword} open={openResetPassword} />
+            <ProcessPayoutModal bankInfo={{ accountHolder: "Dr. Sarah Jenkins", bank: "Chase Bank", account: "1234567890", routing: "987654321" }} currentEarnings={"$12,345.67"} doctorName={'Dr. Steven Steves'} onClose={handlePayoutClose} onSubmit={handleSubmit} open={payoutModalOpen} />
         </StyledTableContainer>
     )
 }

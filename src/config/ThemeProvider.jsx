@@ -10,11 +10,20 @@ const theme = createTheme({
         },
         brand: {
             secPrimary: "#036FAE",
-            blue: "#1976d2",
-            green: "#2e7d32",
-            orange: "#ed6c02",
-            red: "#d32f2f",
+            blue: "#0B3977",
+            green: "#138015",
+            orange: "#624F25",
+            red: "#FA3434",
         },
+        bg: {
+            orange: "#EDBC4A80",
+            green: "#B1FEB280",
+            blue: "#BAD7FF80",
+            red: "#FA343433",
+
+
+
+        }
     },
     typography: {
         fontFamily: "Inter, sans-serif",

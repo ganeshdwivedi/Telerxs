@@ -4,6 +4,7 @@ import MedicineTable from "../components/MedicineTable"
 
 
 const MedicineInventory = () => {
+
     return (
         <Box component="main" sx={{ flex: 1, overflow: "hidden" }}>
             <Typography
@@ -19,6 +20,7 @@ const MedicineInventory = () => {
                 Medicine Inventory
             </Typography>
             <MedicineTable />
+
         </Box>
     )
 }

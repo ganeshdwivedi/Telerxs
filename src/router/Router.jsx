@@ -7,22 +7,26 @@ import PatientManagement from "../pages/PatientManagement";
 import MedicineInventory from "../pages/MedicineInventory";
 import PatientDetails from "../features/PatientInfo";
 import { Suspense } from "react";
+import Dashboard from "../pages/Dashboard";
+import Prescription from "../pages/Prescription";
+import SubAdminPermission from "../pages/SubAdminPermission";
+import Login from "../pages/Login";
 // import RequireAuth from "./RequireAuth";
 
 const router = createBrowserRouter([
     {
+        path: "/auth/login",
+        element: <Login />,
+    },
+    {
         path: "/",
         element: <MainLayout />,
         children: [
-            // {
-            //     path: "/login",
-            //     element: <Login />,
-            // },
             {
                 path: "/dashboard",
                 element: (
                     // <RequireAuth>
-                    <></>
+                    <Dashboard />
                     // </RequireAuth>
                 ),
             },
@@ -53,6 +57,18 @@ const router = createBrowserRouter([
             {
                 path: "/medicine-inventory",
                 element: <MedicineInventory />
+            },
+            {
+                path: "/orders",
+                element: (
+                    // <RequireAuth>
+                    <Prescription />
+                    // </RequireAuth>
+                ),
+            },
+            {
+                path: "/sub-admin",
+                element: <SubAdminPermission />
             }
         ]
     },

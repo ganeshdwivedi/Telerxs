@@ -17,7 +17,7 @@ const TabButton = styled(Button, {
         ? theme.palette.common.white
         : theme.palette.text.secondary,
 
-    boxShadow: theme.shadows[1],
+    // boxShadow: theme.shadows[1],
 
     "&:hover": {
         backgroundColor: active

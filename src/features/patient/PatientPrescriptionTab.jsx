@@ -44,7 +44,7 @@ const ActionButton = styled(Button)(({ theme }) => ({
     textTransform: "none",
     borderRadius: "8px",
     padding: "8px 24px",
-    fontWeight: 600,
+    fontWeight: 500,
     boxShadow: "none",
 }))
 

@@ -48,7 +48,7 @@ const PillTab = styled(Tab)(({ theme }) => ({
     marginRight: "16px",
     color: "#4a5568",
     backgroundColor: "#ffffff",
-    fontWeight: 600,
+    fontWeight: 500,
     "&.Mui-selected": {
         color: "#ffffff",
         backgroundColor: "#005492",
@@ -68,7 +68,7 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box sx={{ p: 3 }}>
+                <Box>
                     <Typography>{children}</Typography>
                 </Box>
             )}

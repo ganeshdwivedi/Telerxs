@@ -46,9 +46,9 @@ export default function Navbar() {
                 {/* Left Section: Logo and Actions */}
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                     {/* Logo Pill */}
-                    <LogoContainer>
-                        <Logo />
-                    </LogoContainer>
+                    {/* <LogoContainer> */}
+                    <Logo sx={{ width: '100px', height: '100%', }} />
+                    {/* </LogoContainer> */}
 
                     {/* Search, Notifications, Settings Pill */}
                     <ActionContainer>
