@@ -89,7 +89,7 @@ const StyledTableContainer = styled(TableContainer)({
     boxShadow: "none",
     border: "1px solid #edf2f7",
     backgroundColor: "#ffffff",
-    padding: "24px",
+    // padding: "24px",
     marginTop: "24px",
 })
 
