@@ -28,7 +28,7 @@ export default function BaseModal({
             {/* Teal Header */}
             <DialogTitle
                 sx={{
-                    backgroundColor: "#00607C",
+                    backgroundColor: "#00598D",
                     color: "white",
                     padding: "16px 24px",
                     display: "flex",
@@ -36,7 +36,7 @@ export default function BaseModal({
                     alignItems: "center",
                 }}
             >
-                <Box sx={{ fontSize: "20px", fontWeight: 500 }}>{title}</Box>
+                <Box sx={{ fontSize: "20px", fontWeight: 550 }}>{title}</Box>
                 <Box sx={{ display: "flex", gap: 1 }}>
                     <Button
                         onClick={onCancel}

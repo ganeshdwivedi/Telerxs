@@ -11,6 +11,9 @@ import Dashboard from "../pages/Dashboard";
 import Prescription from "../pages/Prescription";
 import SubAdminPermission from "../pages/SubAdminPermission";
 import Login from "../pages/Login";
+import ReportsAndExports from "../pages/ReportsAndExports";
+import ContactQuery from "../pages/ContactQuery";
+import MarketingNotificationsPage from "../pages/MarketingPage";
 // import RequireAuth from "./RequireAuth";
 
 const router = createBrowserRouter([
@@ -73,6 +76,17 @@ const router = createBrowserRouter([
             {
                 path: "/sub-admin",
                 element: <SubAdminPermission />
+            },
+            {
+                path: "/reports",
+                element: <ReportsAndExports />
+            },
+            {
+                path: "/contact-queries",
+                element: <ContactQuery />
+            }, {
+                path: "/marketing",
+                element: <MarketingNotificationsPage />
             }
         ]
     },

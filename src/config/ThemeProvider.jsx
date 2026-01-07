@@ -14,15 +14,14 @@ const theme = createTheme({
             green: "#138015",
             orange: "#624F25",
             red: "#FA3434",
+            purple: "#6938EF"
         },
         bg: {
             orange: "#EDBC4A80",
             green: "#B1FEB280",
             blue: "#BAD7FF80",
             red: "#FA343433",
-
-
-
+            purple: "#6938EF1A",
         }
     },
     typography: {

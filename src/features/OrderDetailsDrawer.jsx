@@ -7,6 +7,8 @@ import LocationOnIcon from "@mui/icons-material/LocationOn"
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital"
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday"
 import MedicationIcon from "@mui/icons-material/Medication"
+import theme from "../config/ThemeProvider"
+import { getStatusIcon } from "./PrescriptionTable"
 
 // interface OrderDetailsDrawerProps {
 //     open: boolean
@@ -26,16 +28,34 @@ import MedicationIcon from "@mui/icons-material/Medication"
 // }
 
 export default function OrderDetailsDrawer({ open, onClose, orderData }) {
-    const getStatusColor = (status) => {
-        const colors = {
-            Pending: { bg: "#FFF4E5", color: "#F57C00" },
-            Processing: { bg: "#E3F2FD", color: "#1976D2" },
-            Dispatched: { bg: "#F3E5F5", color: "#7B1FA2" },
-            Delivered: { bg: "#E8F5E9", color: "#388E3C" },
-            Cancelled: { bg: "#FFEBEE", color: "#D32F2F" },
-        }
-        return colors[status] || colors.Pending
-    }
+    const statusColors = {
+        Pending: {
+            bg: theme.palette.bg.orange,
+            text: theme.palette.brand.orange,
+            // border: theme.palette.brand.orange,
+        },
+
+        Processing: {
+            bg: theme.palette.bg.blue,
+            text: theme.palette.brand.blue,
+        },
+
+        Dispatched: {
+            bg: theme.palette.bg.blue,
+            text: theme.palette.brand.secPrimary,
+        },
+
+        Delivered: {
+            bg: theme.palette.bg.green,
+            text: theme.palette.brand.green,
+        },
+
+        Cancelled: {
+            bg: theme.palette.bg.red,
+            text: theme.palette.brand.red,
+        },
+    };
+
 
     return (
         <Drawer
@@ -70,24 +90,15 @@ export default function OrderDetailsDrawer({ open, onClose, orderData }) {
             <Box sx={{ padding: "24px" }}>
                 {/* Status Badge */}
                 <Chip
-                    icon={
-                        <Box
-                            sx={{
-                                width: "8px",
-                                height: "8px",
-                                borderRadius: "50%",
-                                backgroundColor: getStatusColor(orderData.status).color,
-                                marginLeft: "8px",
-                            }}
-                        />
-                    }
+                    icon={getStatusIcon(orderData.status)}
                     label={orderData.status}
                     sx={{
-                        backgroundColor: getStatusColor(orderData.status).bg,
-                        color: getStatusColor(orderData.status).color,
+                        backgroundColor: statusColors[orderData.status].bg,
+                        color: statusColors[orderData.status].color,
                         fontWeight: 500,
                         fontSize: "13px",
                         height: "28px",
+                        px: '12px',
                         marginBottom: "24px",
                         "& .MuiChip-icon": {
                             margin: 0,

@@ -16,6 +16,8 @@ import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined"
 import PatientHealthHistory from "./patient/PatientHealthHistoryTab"
 import PrescriptionTable from "./patient/PatientPrescriptionTab"
 import TransactionTable from "./patient/PatientTransactionTab"
+import TabPanel from "../components/TabPanel"
+import CustomTab from "../components/Tab"
 
 const BackLink = styled(Box)(({ theme }) => ({
     display: "flex",
@@ -40,41 +42,10 @@ const ProfileCard = styled(Card)(({ theme }) => ({
     marginBottom: "32px",
 }))
 
-const PillTab = styled(Tab)(({ theme }) => ({
-    textTransform: "none",
-    borderRadius: "24px",
-    minHeight: "44px",
-    padding: "8px 24px",
-    marginRight: "16px",
-    color: "#4a5568",
-    backgroundColor: "#ffffff",
-    fontWeight: 500,
-    "&.Mui-selected": {
-        color: "#ffffff",
-        backgroundColor: "#005492",
-    },
-}))
 
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
 
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`full-width-tabpanel-${index}`}
-            aria-labelledby={`full-width-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
-}
+
 
 export default function PatientDetails() {
     const [tabValue, setTabValue] = React.useState(0)
@@ -88,7 +59,7 @@ export default function PatientDetails() {
             </BackLink>
 
             <ProfileCard>
-                <Avatar src="/placeholder.svg?height=100&width=100" sx={{ width: 100, height: 100, borderRadius: "16px" }} />
+                <Avatar src="/placeholder.svg?height=100&width=100" sx={{ width: 120, height: 120, borderRadius: "50%" }} />
                 <Box>
                     <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: "#2d3748" }}>
                         John Doe
@@ -115,9 +86,9 @@ export default function PatientDetails() {
                 TabIndicatorProps={{ style: { display: "none" } }}
                 sx={{ mb: 3 }}
             >
-                <PillTab label="Health History(03)" />
-                <PillTab label="Prescription (02)" />
-                <PillTab label="Transaction (05)" />
+                <CustomTab label="Health History(03)" />
+                <CustomTab label="Prescription (02)" />
+                <CustomTab label="Transaction (05)" />
 
             </Tabs>
             <TabPanel value={tabValue} index={0} > <PatientHealthHistory /></TabPanel>

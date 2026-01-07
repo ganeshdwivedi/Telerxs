@@ -28,6 +28,7 @@ import { IoCloseCircleOutline } from "react-icons/io5"
 import ProcessRefundModal from "./ProcessRefund"
 import SendToPharmacyModal from "./SendToPharmacyModal"
 import OrderDetailsDrawer from "./OrderDetailsDrawer"
+import theme from "../config/ThemeProvider"
 
 
 
@@ -110,12 +111,33 @@ const mockOrders = [
 ]
 
 const statusColors = {
-    Pending: { bg: "#FFF4E5", text: "#663C00", border: "#FFE0B2" },
-    Processing: { bg: "#E3F2FD", text: "#0D47A1", border: "#BBDEFB" },
-    Dispatched: { bg: "#F3E5F5", text: "#4A148C", border: "#E1BEE7" },
-    Delivered: { bg: "#E8F5E9", text: "#1B5E20", border: "#C8E6C9" },
-    Cancelled: { bg: "#FFEBEE", text: "#B71C1C", border: "#FFCDD2" },
-}
+    Pending: {
+        bg: theme.palette.bg.orange,
+        text: theme.palette.brand.orange,
+        // border: theme.palette.brand.orange,
+    },
+
+    Processing: {
+        bg: theme.palette.bg.blue,
+        text: theme.palette.brand.blue,
+    },
+
+    Dispatched: {
+        bg: theme.palette.bg.blue,
+        text: theme.palette.brand.secPrimary,
+    },
+
+    Delivered: {
+        bg: theme.palette.bg.green,
+        text: theme.palette.brand.green,
+    },
+
+    Cancelled: {
+        bg: theme.palette.bg.red,
+        text: theme.palette.brand.red,
+    },
+};
+
 
 const orderData = {
     orderNumber: "ORD-2025-00124",
@@ -134,6 +156,23 @@ const orderData = {
     ],
 };
 
+
+export const getStatusIcon = (status) => {
+    switch (status) {
+        case "Pending":
+            return <MdOutlineWatchLater />
+        case "Processing":
+            return <BsBoxSeam />
+        case "Dispatched":
+            return <FiTruck />
+        case "Delivered":
+            return <LuCircleCheckBig />
+        case "Cancelled":
+            return <IoCloseCircleOutline />
+        default:
+            return ""
+    }
+}
 
 export default function PrescriptionsOrdersPage() {
     const [isProcessRefundOpen, setIsProcessRefundOpen] = useState(false);
@@ -164,22 +203,7 @@ export default function PrescriptionsOrdersPage() {
     };
 
 
-    const getStatusIcon = (status) => {
-        switch (status) {
-            case "Pending":
-                return <MdOutlineWatchLater />
-            case "Processing":
-                return <BsBoxSeam />
-            case "Dispatched":
-                return <FiTruck />
-            case "Delivered":
-                return <LuCircleCheckBig />
-            case "Cancelled":
-                return <IoCloseCircleOutline />
-            default:
-                return ""
-        }
-    }
+
 
     return (
         <Box>

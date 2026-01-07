@@ -109,7 +109,7 @@ export default function StatCard({ label, value, trend, trendLabel, icon }) {
                     {isPositive ? (
                         <NorthEastIcon sx={{ fontSize: "14px", color: "#48bb78", rotate: '-90deg' }} />
                     ) : (
-                        <SouthWestIcon sx={{ fontSize: "14px", color: "#f56565" }} />
+                        <SouthWestIcon sx={{ fontSize: "14px", color: "#f56565", rotate: '-90deg' }} />
                     )}
                     <Typography
                         variant="caption"

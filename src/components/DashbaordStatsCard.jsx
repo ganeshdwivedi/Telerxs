@@ -20,10 +20,10 @@ const IconWrapper = styled(Box)(({ theme }) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#E8F4F8",
+    backgroundColor: '#00598D',
     flexShrink: 0,
     "& svg": {
-        color: "#0066A1",
+        color: 'white',
         fontSize: "24px",
     },
 }))

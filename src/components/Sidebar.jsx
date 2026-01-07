@@ -60,9 +60,9 @@ export default function Sidebar() {
         { icon: LuUserRoundCog, path: "/sub-admin" },
         { icon: FactCheckOutlinedIcon },
         { icon: ShieldOutlinedIcon },
-        { icon: CampaignOutlinedIcon },
-        { icon: LuChartLine },
-        { icon: LuContactRound },
+        { icon: CampaignOutlinedIcon, path: "/marketing" },
+        { icon: LuChartLine, path: "/reports" },
+        { icon: LuContactRound, path: "/contact-queries" },
         { icon: MonitorOutlinedIcon },
     ]
 
@@ -70,7 +70,7 @@ export default function Sidebar() {
         <SidebarContainer>
             <Stack spacing={0.5} alignItems="center">
                 {items.map((item, index) => (
-                    <Link to={item?.path}>
+                    <Link key={item?.path} to={item?.path}>
                         <SidebarItem key={index} icon={item.icon} active={location.pathname.includes(item?.path)} />
                     </Link>
                 ))}

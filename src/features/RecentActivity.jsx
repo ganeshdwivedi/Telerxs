@@ -1,4 +1,4 @@
-
+import { useState } from "react"
 import {
     Box,
     Card,
@@ -11,6 +11,11 @@ import {
     Typography,
     styled,
 } from "@mui/material"
+import { FiArrowUp, FiArrowDown } from "react-icons/fi"
+import { LuCircleCheckBig } from "react-icons/lu"
+import { MdOutlineWatchLater } from "react-icons/md"
+import theme from "../config/ThemeProvider"
+
 const StyledCard = styled(Card)({
     background: "white",
     border: "none",
@@ -30,11 +35,11 @@ const data = [
         user: "John Doe (Patient)",
         action: "New Consultation Booking",
         status: "Pending",
-        time: "10 mins ago",
+        time: "15 mins ago",
     },
     {
         user: "Dr. Mark Lee",
-        action: "Payout Batch #502",
+        action: "Payout Batch #402",
         status: "Processing",
         time: "20 mins ago",
     },
@@ -55,71 +60,194 @@ const data = [
 const getStatusColor = (status) => {
     switch (status) {
         case "Completed":
-            return "#10B981"
+            return {
+                text: theme.palette.brand.green,
+                bg: theme.palette.bg.green,
+            }
         case "Pending":
-            return "#F59E0B"
+            return {
+                text: theme.palette.brand.orange,
+                bg: theme.palette.bg.orange,
+            }
         case "Processing":
-            return "#3B82F6"
+            return {
+                text: theme.palette.brand.blue,
+                bg: theme.palette.bg.blue,
+            }
         default:
-            return "#6B7280"
+            return {
+                text: theme.palette.brand.blue,
+                bg: theme.palette.bg.blue,
+            }
+    }
+}
+
+const getStatusIcon = (status) => {
+    switch (status) {
+        case "Completed":
+            return <LuCircleCheckBig />
+        case "Pending":
+        case "Processing":
+            return <MdOutlineWatchLater />
+        default:
+            return null
     }
 }
 
 export default function RecentActivity() {
+    const [orderBy, setOrderBy] = useState("time")
+    const [order, setOrder] = useState("desc")
+
+    const handleSort = (column) => {
+        if (orderBy === column) {
+            setOrder(order === "asc" ? "desc" : "asc")
+        } else {
+            setOrderBy(column)
+            setOrder("asc")
+        }
+    }
+
+    const sortedData = [...data].sort((a, b) => {
+        const valueA = a[orderBy].toLowerCase()
+        const valueB = b[orderBy].toLowerCase()
+
+        if (valueA < valueB) return order === "asc" ? -1 : 1
+        if (valueA > valueB) return order === "asc" ? 1 : -1
+        return 0
+    })
+
+    const SortableHeader = ({ label, column }) => (
+        <TableCell
+            onClick={() => handleSort(column)}
+            sx={{
+                fontWeight: 700,
+                fontSize: "12px",
+                color: "#4A5568",
+                padding: "8px 0",
+                cursor: "pointer",
+                userSelect: "none",
+            }}
+        >
+            <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                {label}
+                {orderBy === column &&
+                    (order === "asc" ? (
+                        <FiArrowUp size={12} />
+                    ) : (
+                        <FiArrowDown size={12} />
+                    ))}
+            </Box>
+        </TableCell>
+    )
+
     return (
         <StyledCard>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-                <Typography sx={{ fontSize: "16px", fontWeight: 700, color: "#1A202C" }}>Recent Activity</Typography>
-                <Typography sx={{ fontSize: "12px", color: "#0066A1", cursor: "pointer", fontWeight: 600 }}>
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    mb: 2,
+                }}
+            >
+                <Typography
+                    sx={{
+                        fontSize: "16px",
+                        fontWeight: 700,
+                        color: "#1A202C",
+                    }}
+                >
+                    Recent Activity
+                </Typography>
+
+                <Typography
+                    sx={{
+                        fontSize: "12px",
+                        color: "#0066A1",
+                        cursor: "pointer",
+                        fontWeight: 600,
+                    }}
+                >
                     View all
                 </Typography>
             </Box>
+
             <TableContainer>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ fontWeight: 700, fontSize: "12px", color: "#4A5568", padding: "8px 0" }}>
-                                User/Doctor
-                            </TableCell>
-                            <TableCell sx={{ fontWeight: 700, fontSize: "12px", color: "#4A5568", padding: "8px 0" }}>
-                                Action
-                            </TableCell>
-                            <TableCell sx={{ fontWeight: 700, fontSize: "12px", color: "#4A5568", padding: "8px 0" }}>
-                                Status
-                            </TableCell>
-                            <TableCell sx={{ fontWeight: 700, fontSize: "12px", color: "#4A5568", padding: "8px 0" }}>Time</TableCell>
+                            <SortableHeader label="User/Doctor" column="user" />
+                            <SortableHeader label="Action" column="action" />
+                            <SortableHeader label="Status" column="status" />
+                            <SortableHeader label="Time" column="time" />
                         </TableRow>
                     </TableHead>
+
                     <TableBody>
-                        {data.map((row, idx) => (
+                        {sortedData.map((row, idx) => (
                             <TableRow key={idx}>
-                                <TableCell sx={{ fontSize: "13px", color: "#1A202C", padding: "12px 0" }}>{row.user}</TableCell>
-                                <TableCell sx={{ fontSize: "13px", color: "#1A202C", padding: "12px 0" }}>{row.action}</TableCell>
+                                <TableCell
+                                    sx={{
+                                        fontSize: "13px",
+                                        color: "#1A202C",
+                                        padding: "12px 0",
+                                    }}
+                                >
+                                    {row.user}
+                                </TableCell>
+
+                                <TableCell
+                                    sx={{
+                                        fontSize: "13px",
+                                        color: "#1A202C",
+                                        padding: "12px 0",
+                                    }}
+                                >
+                                    {row.action}
+                                </TableCell>
+
                                 <TableCell sx={{ padding: "12px 0" }}>
                                     <Box
                                         sx={{
                                             display: "inline-flex",
                                             alignItems: "center",
                                             gap: "6px",
-                                            padding: "4px 8px",
-                                            backgroundColor: `${getStatusColor(row.status)}15`,
-                                            borderRadius: "4px",
+                                            padding: "4px 10px",
+                                            backgroundColor:
+                                                getStatusColor(row.status).bg,
+                                            borderRadius: "999px",
+                                            "& svg": {
+                                                color:
+                                                    getStatusColor(row.status)
+                                                        .text,
+                                                fontSize: "14px",
+                                            },
                                         }}
                                     >
-                                        <Box
+                                        {getStatusIcon(row.status)}
+                                        <Typography
                                             sx={{
-                                                width: "6px",
-                                                height: "6px",
-                                                borderRadius: "50%",
-                                                backgroundColor: getStatusColor(row.status),
+                                                fontSize: "12px",
+                                                color:
+                                                    getStatusColor(row.status)
+                                                        .text,
+                                                fontWeight: 600,
                                             }}
-                                        />
-                                        <Typography sx={{ fontSize: "12px", color: getStatusColor(row.status), fontWeight: 600 }}>
+                                        >
                                             {row.status}
                                         </Typography>
                                     </Box>
                                 </TableCell>
-                                <TableCell sx={{ fontSize: "13px", color: "#718096", padding: "12px 0" }}>{row.time}</TableCell>
+
+                                <TableCell
+                                    sx={{
+                                        fontSize: "13px",
+                                        color: "#718096",
+                                        padding: "12px 0",
+                                    }}
+                                >
+                                    {row.time}
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

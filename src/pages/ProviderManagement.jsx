@@ -1,7 +1,7 @@
 import { Box, createTheme, Grid, Typography, styled } from "@mui/material"
 import WalletOutlinedIcon from "@mui/icons-material/WalletOutlined"
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined"
-import StatCard from "../components/StatsCard"
+import StatCard from "../components/StatCard"
 import FilterTabs from "../features/FilterTabs"
 import ProviderTable from "../features/ProviderTable"
 import { LuUsers } from "react-icons/lu"

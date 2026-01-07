@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material"
+import { Box, Grid, Stack, Typography } from "@mui/material"
 
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined"
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined"
@@ -9,25 +9,74 @@ import DashboardStatCard from "../components/DashbaordStatsCard"
 import PrescriptionsByRegion from "../features/PrescriptionByRegion"
 import RevenueChart from "../features/RevenueChart"
 import RecentActivity from "../features/RecentActivity"
-import StatCard from "../components/StatsCard"
+import StatCard from "../components/StatCard"
 import { LuShoppingBag, LuStethoscope, LuUsers, LuWallet } from "react-icons/lu"
+import CustomSelect from "../components/CustomSelect"
+import { useState } from "react"
 
 
 export default function Dashboard() {
+    const [region, setRegion] = useState("all");
+    const [doctor, setDoctor] = useState("all");
+    const [medicine, setMedicine] = useState("all");
+    const [date, setDate] = useState("30");
+
     return (
         <Box component="main" sx={{ flex: 1, overflow: "hidden" }}>
-            <Typography
-                variant="h4"
-                sx={{
-                    fontWeight: 500,
-                    color: "#2d3748",
-                    mb: 3,
-                    fontSize: "1.6rem",
-                    letterSpacing: "-0.5px",
-                }}
-            >
-                Dashboard
-            </Typography>
+
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: "center", justifyContent: "space-between", mb: 2 }}>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        fontWeight: 500,
+                        color: "#2d3748",
+                        mb: 3,
+                        fontSize: "1.6rem",
+                        letterSpacing: "-0.5px",
+                    }}
+                >
+                    Dashboard
+                </Typography><Stack direction="row" spacing={2}>
+                    <CustomSelect
+                        value={region}
+                        onChange={(e) => setRegion(e.target.value)}
+                        options={[
+                            { label: "All Regions", value: "all" },
+                            { label: "North", value: "north" },
+                            { label: "South", value: "south" },
+                        ]}
+                    />
+
+                    <CustomSelect
+                        value={doctor}
+                        onChange={(e) => setDoctor(e.target.value)}
+                        options={[
+                            { label: "All Doctors", value: "all" },
+                            { label: "Dr. John", value: "john" },
+                            { label: "Dr. Smith", value: "smith" },
+                        ]}
+                    />
+
+                    <CustomSelect
+                        value={medicine}
+                        onChange={(e) => setMedicine(e.target.value)}
+                        options={[
+                            { label: "All Medications", value: "all" },
+                            { label: "Paracetamol", value: "para" },
+                            { label: "Ibuprofen", value: "ibu" },
+                        ]}
+                    />
+
+                    <CustomSelect
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        options={[
+                            { label: "Last 7 Days", value: "7" },
+                            { label: "Last 30 Days", value: "30" },
+                            { label: "Last 90 Days", value: "90" },
+                        ]}
+                    />
+                </Stack></Box>
 
             <Box
                 sx={{
