@@ -5,7 +5,7 @@ import ReportsExportsPage from '../features/ReportsExport'
 const ReportsAndExports = () => {
 
     return (
-        <Box>
+        <Box component="main" sx={{ flex: 1, overflow: "hidden" }}>
             <Typography
                 variant="h5"
                 sx={{

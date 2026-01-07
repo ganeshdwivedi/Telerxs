@@ -26,7 +26,7 @@ const StyledCard = styled(Card)({
     padding: "20px",
 })
 
-export default function RevenueChart() {
+export default function RevenueChartDuo() {
     return (
         <StyledCard>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>

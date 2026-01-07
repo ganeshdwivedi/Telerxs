@@ -14,6 +14,8 @@ import Login from "../pages/Login";
 import ReportsAndExports from "../pages/ReportsAndExports";
 import ContactQuery from "../pages/ContactQuery";
 import MarketingNotificationsPage from "../pages/MarketingPage";
+import SecurityCompliancePage from "../pages/SecurityCompliance";
+import FinancialOverview from "../pages/FinancialOverview";
 // import RequireAuth from "./RequireAuth";
 
 const router = createBrowserRouter([
@@ -74,8 +76,16 @@ const router = createBrowserRouter([
                 ),
             },
             {
+                path: "/financial-overview",
+                element: <FinancialOverview />
+            },
+            {
                 path: "/sub-admin",
                 element: <SubAdminPermission />
+            },
+            {
+                path: "/security",
+                element: <SecurityCompliancePage />
             },
             {
                 path: "/reports",

@@ -7,12 +7,12 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import AIInsightsPanel from "../features/AIInsightsPanel"
 import DashboardStatCard from "../components/DashbaordStatsCard"
 import PrescriptionsByRegion from "../features/PrescriptionByRegion"
-import RevenueChart from "../features/RevenueChart"
 import RecentActivity from "../features/RecentActivity"
 import StatCard from "../components/StatCard"
 import { LuShoppingBag, LuStethoscope, LuUsers, LuWallet } from "react-icons/lu"
 import CustomSelect from "../components/CustomSelect"
 import { useState } from "react"
+import RevenueChartDuo from "../features/RevenueChartDuo"
 
 
 export default function Dashboard() {
@@ -155,7 +155,7 @@ export default function Dashboard() {
                 gap: 3,
                 mb: 4,
             }}>
-                <RevenueChart />
+                <RevenueChartDuo />
                 <AIInsightsPanel />
             </Box>
 

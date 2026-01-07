@@ -19,7 +19,7 @@ const Prescription = () => {
 
 
     return (
-        <Box >
+        <Box component="main" sx={{ flex: 1, overflow: "hidden" }}>
             {/* Header */}
             <Typography variant="h5" sx={{ fontSize: "1.6rem", mb: 3, fontWeight: 500, color: "#1a1a1a" }}>
                 Prescriptions & Orders
