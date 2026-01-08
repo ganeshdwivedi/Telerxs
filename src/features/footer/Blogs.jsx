@@ -99,6 +99,7 @@ const Blog = () => {
                         variant="contained"
                         startIcon={<AddIcon />}
                         sx={{
+                            borderRadius: 2,
                             bgcolor: "#00598D",
                             textTransform: "none",
                             "&:hover": {

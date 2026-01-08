@@ -10,10 +10,12 @@ import {
     DialogActions,
     TextField,
     Tabs,
+    Stack,
 } from "@mui/material"
 import { FormAccordion } from "../features/FormAccordion"
 import CustomTab from "../components/Tab"
 import TabPanel from "../components/TabPanel"
+import { Add } from "@mui/icons-material"
 
 // interface Field {
 //     id: string
@@ -127,12 +129,17 @@ export default function FormBuilder() {
     return (
         <Container component="main" sx={{ flex: 1, overflow: "hidden" }}>
             <Box sx={{ marginBottom: "24px" }}>
-                <Typography variant="h5" sx={{ fontWeight: 700, marginBottom: "8px", color: "#1a1a1a" }}>
-                    Form Builder
+                <Typography variant="h4"
+                    sx={{
+                        fontWeight: 500,
+                        color: "#2d3748",
+                        mb: 3,
+                        fontSize: "1.6rem",
+                        letterSpacing: "-0.5px",
+                    }}>
+                    Intake Form
                 </Typography>
-                <Typography variant="body2" sx={{ color: "#666" }}>
-                    Organize and manage your form fields by section
-                </Typography>
+
             </Box>
 
             <Tabs
@@ -164,7 +171,56 @@ export default function FormBuilder() {
                 />
             </Tabs>
 
+            <Stack direction="row" spacing={2} sx={{ marginTop: "32px", justifyContent: 'flex-end', my: 2 }}>
+                <Button
+                    variant="outlined"
+                    sx={{
+                        borderRadius: 2,
+                        px: 2,
+                        textTransform: "capitalize",
+                        color: "white",
+                        borderColor: "#E8E8E8",
+                        color: 'black',
+                        "&:hover": {
+                            bgcolor: "#ECECEC",
+                            borderColor: "#666",
+                            color: '#888888'
+                        },
+                    }}
+                >
+                    Preview Form
+                </Button>
+                <Button
+                    variant="contained"
+                    startIcon={<Add />}
+                    sx={{
+                        bgcolor: "#00598D",
+                        textTransform: "none",
+                        "&:hover": {
+                            bgcolor: "#0A5FA0",
+                        },
+                        borderRadius: 2
+                    }}
+                >
+                    Add New Post
+                </Button>
+            </Stack>
+
             <TabPanel value={tabValue} index={0} >   <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                {sections.map((section) => (
+                    <FormAccordion
+                        key={section.id}
+                        title={section.title}
+                        fields={section.fields}
+                        onFieldAdd={(field) => handleAddField(section.id, field)}
+                        onFieldEdit={(field) => handleEditField(section.id, field)}
+                        onFieldDelete={(fieldId) => handleDeleteField(section.id, fieldId)}
+                        onAccordionEdit={() => handleEditSection(section.id)}
+                        onAccordionDelete={() => handleDeleteSection(section.id)}
+                    />
+                ))}
+            </Box></TabPanel>
+            <TabPanel value={tabValue} index={1} >   <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 {sections.map((section) => (
                     <FormAccordion
                         key={section.id}

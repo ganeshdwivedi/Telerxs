@@ -8,6 +8,10 @@ const RichTextEditor = ({ value = "", onChange, placeholder, readOnly }) => {
     return (
         <Box data-color-mode="light">
             <MDEditor
+                preview="edit"
+                hideToolbar={false}
+                data-color-mode="light"
+                style={{ borderRadius: 0 }}
                 value={value}
                 onChange={(val) => onChange?.(val || "")}
                 textareaProps={{
