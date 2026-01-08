@@ -17,6 +17,8 @@ import MarketingNotificationsPage from "../pages/MarketingPage";
 import SecurityCompliancePage from "../pages/SecurityCompliance";
 import FinancialOverview from "../pages/FinancialOverview";
 // import RequireAuth from "./RequireAuth";
+import FormBuilder from "../pages/FormBuilder";
+import FooterManagementPage from "../pages/FooterManagement";
 
 const router = createBrowserRouter([
     {
@@ -92,11 +94,19 @@ const router = createBrowserRouter([
                 element: <ReportsAndExports />
             },
             {
+                path: "/form",
+                element: <FormBuilder />
+            },
+            {
                 path: "/contact-queries",
                 element: <ContactQuery />
             }, {
                 path: "/marketing",
                 element: <MarketingNotificationsPage />
+            },
+            {
+                path: "/footer-management",
+                element: <FooterManagementPage />
             }
         ]
     },

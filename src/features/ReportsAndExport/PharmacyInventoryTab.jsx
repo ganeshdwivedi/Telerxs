@@ -242,37 +242,37 @@ export default function PharmacyInventoryTab() {
                             <TableCell sx={{
                                 color: "#3D3D3D",
                                 fontWeight: 600,
-                                fontSize: "0.8rem", color: "#555", py: 2
+                                fontSize: "0.8rem", py: 2
                             }}>Medicine Name</TableCell>
                             <TableCell sx={{
                                 color: "#3D3D3D",
                                 fontWeight: 600,
-                                fontSize: "0.8rem", color: "#555"
+                                fontSize: "0.8rem",
                             }}>Category</TableCell>
                             <TableCell sx={{
                                 color: "#3D3D3D",
                                 fontWeight: 600,
-                                fontSize: "0.8rem", color: "#555"
+                                fontSize: "0.8rem",
                             }}>Dosage</TableCell>
                             <TableCell sx={{
                                 color: "#3D3D3D",
                                 fontWeight: 600,
-                                fontSize: "0.8rem", color: "#555"
+                                fontSize: "0.8rem",
                             }}>Price</TableCell>
                             <TableCell sx={{
                                 color: "#3D3D3D",
                                 fontWeight: 600,
-                                fontSize: "0.8rem", color: "#555"
+                                fontSize: "0.8rem",
                             }}>Markup</TableCell>
                             <TableCell sx={{
                                 color: "#3D3D3D",
                                 fontWeight: 600,
-                                fontSize: "0.8rem", color: "#555"
+                                fontSize: "0.8rem",
                             }}>Stock</TableCell>
                             <TableCell sx={{
                                 color: "#3D3D3D",
                                 fontWeight: 600,
-                                fontSize: "0.8rem", color: "#555"
+                                fontSize: "0.8rem",
                             }}>Status</TableCell>
                         </TableRow>
                     </TableHead>

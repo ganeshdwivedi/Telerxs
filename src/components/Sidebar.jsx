@@ -58,12 +58,12 @@ export default function Sidebar() {
         { icon: RiFilePaper2Line, path: "/orders" },
         { icon: LuReceipt, path: "/financial-overview" },
         { icon: LuUserRoundCog, path: "/sub-admin" },
-        { icon: FactCheckOutlinedIcon },
+        { icon: FactCheckOutlinedIcon, path: '/form' },
         { icon: ShieldOutlinedIcon, path: "/security" },
         { icon: CampaignOutlinedIcon, path: "/marketing" },
         { icon: LuChartLine, path: "/reports" },
         { icon: LuContactRound, path: "/contact-queries" },
-        { icon: MonitorOutlinedIcon },
+        { icon: MonitorOutlinedIcon, path: '/footer-management' },
     ]
 
     return (
