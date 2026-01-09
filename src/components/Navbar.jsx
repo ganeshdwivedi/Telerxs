@@ -39,7 +39,7 @@ export default function Navbar() {
             elevation={0}
             sx={{
                 backgroundColor: "#f0f7ff", // Very light blue background
-                padding: "12px 24px",
+                padding: "0px 24px",
             }}
         >
             <Toolbar disableGutters sx={{ justifyContent: "space-between", minHeight: "auto" }}>

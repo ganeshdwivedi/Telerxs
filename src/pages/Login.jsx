@@ -12,21 +12,48 @@ import {
 } from "@mui/material"
 import { Visibility, VisibilityOff } from "@mui/icons-material"
 import { useState } from "react"
+import { useForm, Controller } from "react-hook-form"
 import Logo from "../components/Logo"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import axios from "axios"
+import apiCaller from "../api/ApiCaller"
+import { useNavigate } from "react-router-dom"
 
 export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false)
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [rememberMe, setRememberMe] = useState(false)
+    const queryClient = useQueryClient()
+    const navigate = useNavigate();
+    const {
+        control,
+        handleSubmit,
+    } = useForm({
+        defaultValues: {
+            identifier: "",
+            password: "",
+        },
+    })
 
-    const handleTogglePassword = () => {
-        setShowPassword(!showPassword)
+    const { mutate } = useMutation({
+        mutationFn: async (data) => {
+            const response = await apiCaller.post('/login', data);
+            const { accessToken, user } = response?.data?.data;
+            console.log(response.data, 'data');
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('user', JSON.stringify(user));
+            navigate('/dashboard');
+        },
+        onError: (error) => {
+            alert(error?.response?.data?.message)
+        },
+    })
+
+    const onSubmit = (data) => {
+        mutate(data)
+        console.log("Login attempt:", data)
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log("Login attempt:", { email, rememberMe })
+    const handleTogglePassword = () => {
+        setShowPassword((prev) => !prev)
     }
 
     return (
@@ -55,10 +82,9 @@ export default function LoginPage() {
                     }}
                 >
                     {/* Logo */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Logo sx={{ width: '140px', height: '100%', }} />
+                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <Logo sx={{ width: "140px", height: "100%" }} />
                     </Box>
-
 
                     {/* Heading */}
                     <Typography
@@ -84,8 +110,8 @@ export default function LoginPage() {
                     </Typography>
 
                     {/* Form */}
-                    <Box component="form" onSubmit={handleSubmit}>
-                        {/* Email Field */}
+                    <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+                        {/* Email */}
                         <Typography
                             variant="body2"
                             sx={{
@@ -97,36 +123,41 @@ export default function LoginPage() {
                         >
                             Email
                         </Typography>
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            placeholder=""
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            sx={{
-                                mb: 2,
-                                "& .MuiOutlinedInput-root": {
-                                    bgcolor: "#FAFAFA",
-                                    borderRadius: "8px",
-                                    "& fieldset": {
-                                        borderColor: "#E5E7EB",
-                                    },
-                                    "&:hover fieldset": {
-                                        borderColor: "#D1D5DB",
-                                    },
-                                    "&.Mui-focused fieldset": {
-                                        borderColor: "#0EA5E9",
-                                        borderWidth: "1px",
-                                    },
-                                },
-                                "& .MuiOutlinedInput-input": {
-                                    padding: "14px 16px",
-                                    fontSize: "15px",
-                                },
-                            }}
+
+                        <Controller
+                            name="identifier"
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    fullWidth
+                                    variant="outlined"
+                                    sx={{
+                                        mb: 2,
+                                        "& .MuiOutlinedInput-root": {
+                                            bgcolor: "#FAFAFA",
+                                            borderRadius: "8px",
+                                            "& fieldset": {
+                                                borderColor: "#E5E7EB",
+                                            },
+                                            "&:hover fieldset": {
+                                                borderColor: "#D1D5DB",
+                                            },
+                                            "&.Mui-focused fieldset": {
+                                                borderColor: "#0EA5E9",
+                                                borderWidth: "1px",
+                                            },
+                                        },
+                                        "& .MuiOutlinedInput-input": {
+                                            padding: "14px 16px",
+                                            fontSize: "15px",
+                                        },
+                                    }}
+                                />
+                            )}
                         />
 
-                        {/* Password Field */}
+                        {/* Password */}
                         <Typography
                             variant="body2"
                             sx={{
@@ -138,69 +169,91 @@ export default function LoginPage() {
                         >
                             Password
                         </Typography>
-                        <TextField
-                            fullWidth
-                            type={showPassword ? "text" : "password"}
-                            variant="outlined"
-                            placeholder=""
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton onClick={handleTogglePassword} edge="end" sx={{ color: "#9CA3AF" }}>
-                                            {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                            sx={{
-                                mb: 2,
-                                "& .MuiOutlinedInput-root": {
-                                    bgcolor: "#FAFAFA",
-                                    borderRadius: "8px",
-                                    "& fieldset": {
-                                        borderColor: "#E5E7EB",
-                                    },
-                                    "&:hover fieldset": {
-                                        borderColor: "#D1D5DB",
-                                    },
-                                    "&.Mui-focused fieldset": {
-                                        borderColor: "#0EA5E9",
-                                        borderWidth: "1px",
-                                    },
-                                },
-                                "& .MuiOutlinedInput-input": {
-                                    padding: "14px 16px",
-                                    fontSize: "15px",
-                                },
-                            }}
-                        />
 
-                        {/* Remember Me */}
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={rememberMe}
-                                    onChange={(e) => setRememberMe(e.target.checked)}
+                        <Controller
+                            name="password"
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    fullWidth
+                                    type={showPassword ? "text" : "password"}
+                                    variant="outlined"
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    onClick={handleTogglePassword}
+                                                    edge="end"
+                                                    sx={{ color: "#9CA3AF" }}
+                                                >
+                                                    {showPassword ? (
+                                                        <VisibilityOff fontSize="small" />
+                                                    ) : (
+                                                        <Visibility fontSize="small" />
+                                                    )}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                     sx={{
-                                        color: "#0EA5E9",
-                                        padding: "6px",
-                                        "&.Mui-checked": {
-                                            color: "#0EA5E9",
+                                        mb: 2,
+                                        "& .MuiOutlinedInput-root": {
+                                            bgcolor: "#FAFAFA",
+                                            borderRadius: "8px",
+                                            "& fieldset": {
+                                                borderColor: "#E5E7EB",
+                                            },
+                                            "&:hover fieldset": {
+                                                borderColor: "#D1D5DB",
+                                            },
+                                            "&.Mui-focused fieldset": {
+                                                borderColor: "#0EA5E9",
+                                                borderWidth: "1px",
+                                            },
+                                        },
+                                        "& .MuiOutlinedInput-input": {
+                                            padding: "14px 16px",
+                                            fontSize: "15px",
                                         },
                                     }}
                                 />
-                            }
-                            label={
-                                <Typography variant="body2" sx={{ color: "#374151", fontSize: "14px", fontWeight: 400 }}>
-                                    Remember Me
-                                </Typography>
-                            }
-                            sx={{ mb: 4, ml: -0.5 }}
+                            )}
                         />
 
-                        {/* Sign In Button */}
+                        {/* Remember Me */}
+                        <Controller
+                            name="rememberMe"
+                            control={control}
+                            render={({ field }) => (
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            {...field}
+                                            checked={field.value}
+                                            sx={{
+                                                color: "#0EA5E9",
+                                                padding: "6px",
+                                                "&.Mui-checked": {
+                                                    color: "#0EA5E9",
+                                                },
+                                            }}
+                                        />
+                                    }
+                                    label={
+                                        <Typography
+                                            variant="body2"
+                                            sx={{ color: "#374151", fontSize: "14px", fontWeight: 400 }}
+                                        >
+                                            Remember Me
+                                        </Typography>
+                                    }
+                                    sx={{ mb: 4, ml: -0.5 }}
+                                />
+                            )}
+                        />
+
+                        {/* Submit */}
                         <Button
                             type="submit"
                             fullWidth

@@ -16,7 +16,9 @@ import {
     Button,
     Switch,
     styled,
+    Skeleton,
 } from "@mui/material"
+import apiCaller from "../api/ApiCaller"
 import SearchIcon from "@mui/icons-material/Search"
 import TuneIcon from '@mui/icons-material/Tune';
 import AddIcon from "@mui/icons-material/Add"
@@ -27,8 +29,11 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime"
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined"
 import { FiCheckCircle } from "react-icons/fi"
 import AddMedicineModal from "../features/AddMedicineModale";
-import { useState } from "react";
-
+import { useRef, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import RoutePagination from "./RoutePagination";
+import AppSnackbar from "./Toast";
+import { useSearchParams } from "react-router-dom";
 
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
@@ -98,12 +103,13 @@ const HeaderCell = styled(TableCell)({
     textTransform: "capitalize",
 })
 
+
 const StatusChip = styled(Chip, {
     shouldForwardProp: (prop) => prop !== "status",
 })(({ status }) => {
     const styles = {
-        "In Stock": { bg: "#f0fff4", color: "#38a169", border: "#c6f6d5" },
-        "Low Stock": { bg: "#EDBC4A80", color: "#624F25", border: "#fefcbf" },
+        "in_stock": { bg: "#f0fff4", color: "#38a169", border: "#c6f6d5" },
+        "low_stock": { bg: "#EDBC4A80", color: "#624F25", border: "#fefcbf" },
         "Out of Stock": { bg: "#FA343433", color: "#FA3434", border: "#fed7d7" },
     }[status] || { bg: "#f7fafc", color: "#4a5568", border: "#edf2f7" }
 
@@ -179,12 +185,31 @@ const medicines = [
     },
 ]
 
-export default function MedicineTable() {
-    const [modalOpen, setModalOpen] = useState(false);
+export const getStockLabel = (status) => {
+    switch (status) {
+        case "in_stock":
+            return "In Stock"
+        case "low_stock":
+            return "Low Stock"
+        case "out_of_stock":
+            return "Out Of Stock"
+        default:
+            return ""
+    }
+}
 
+
+export default function MedicineTable() {
+    const snackbarRef = useRef()
+    const query = useQueryClient();
+    const [searchParams] = useSearchParams()
+    const [modalOpen, setModalOpen] = useState(false);
+    const [editMedicine, setEditMedicine] = useState(null);
     const handleOpen = () => {
         setModalOpen(true);
     };
+    const page = searchParams.get('page');
+    const limit = searchParams.get('limit');
 
     const handleClose = () => {
         setModalOpen(false);
@@ -193,9 +218,59 @@ export default function MedicineTable() {
     const handleSubmit = (data) => {
         console.log("Submitted Medicine Data:", data);
     };
+
+    // ============= Delete Medicine ===============================
+    const { mutate } = useMutation({
+        mutationFn: async (id) => {
+            const response = await apiCaller.delete(`/medicines/${id}`, data);
+        },
+        onSuccess: () => {
+            query.invalidateQueries({ queryKey: ['getAllmedicines'] });
+            snackbarRef.current.showSuccess("Medicine Deleted successfully")
+        },
+        onError: (error) => {
+            snackbarRef.current.showError('Something went wrong!')
+        },
+    })
+
+    // ============================= update visibility ==================
+    const { mutate: UpdateVisibility } = useMutation({
+        mutationFn: async (data) => {
+            const response = await apiCaller.post(`/medicines`, data);
+
+        },
+        onSuccess: () => {
+            query.invalidateQueries({ queryKey: ['getAllmedicines'] });
+            snackbarRef.current.showSuccess("Medicine Deleted successfully")
+        },
+        onError: (error) => {
+            console.log(error.response.data, 'error')
+
+            snackbarRef.current.showError('Something went wrong!')
+        },
+    })
+
+    //==================== get all medicines ========================
+
+    const { data, isLoading } = useQuery({
+        queryKey: ["getAllmedicines", page, limit],
+        queryFn: async () => {
+            const response = await apiCaller.get(`/medicines?page=${page}&limit=${limit}`)
+            return response.data
+        },
+        staleTime: 5 * 60 * 1000, // 5 minutes
+        cacheTime: 10 * 60 * 1000,
+        refetchOnWindowFocus: false,
+    });
+
+    console.log(data, 'data')
     return (
-        <StyledTableContainer component={Paper} elevation={0}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4, gap: 2 }}>
+        <Box sx={{
+            border: "1px solid #edf2f7",
+            backgroundColor: "#ffffff",
+            padding: 2,
+        }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4, gap: 2, flexDirection: ["column", "row"] }}>
                 <TextField
                     placeholder="Search"
                     size="small"
@@ -216,7 +291,7 @@ export default function MedicineTable() {
                         },
                     }}
                 />
-                <Box sx={{ display: "flex", gap: 2 }}>
+                <Box sx={{ display: "flex", gap: 2, flexDirection: ["column", "row"] }}>
                     <Button
                         variant="outlined"
                         startIcon={<TuneIcon />}
@@ -250,95 +325,116 @@ export default function MedicineTable() {
                 </Box>
             </Box>
 
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <HeaderCell>Medicine Name</HeaderCell>
-                        <HeaderCell>Category</HeaderCell>
-                        <HeaderCell>Dosage</HeaderCell>
-                        <HeaderCell>Price</HeaderCell>
-                        <HeaderCell>Markup</HeaderCell>
-                        <HeaderCell>Stock</HeaderCell>
-                        <HeaderCell>Status</HeaderCell>
-                        <HeaderCell>Visibility</HeaderCell>
-                        <HeaderCell align="right">Actions</HeaderCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {medicines.map((row, index) => (
-                        <TableRow key={index} sx={{ "& td": { borderBottom: "1.5px solid #f7fafc" } }}>
-                            <TableCell sx={{ py: 2 }}>
-                                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                                    <Avatar src={row.image} sx={{ width: 40, height: 40, borderRadius: "8px" }} />
-                                    <Box>
-                                        <Typography variant="subtitle2" sx={{ fontWeight: 600, color: "#1a202c" }}>
-                                            {row.name}
-                                        </Typography>
-                                        <Typography variant="caption" sx={{ color: "#718096" }}>
-                                            {row.brand}
-                                        </Typography>
-                                    </Box>
-                                </Box>
-                            </TableCell>
-                            <TableCell>
-                                <CategoryChip label={row.category} />
-                            </TableCell>
-                            <TableCell>
-                                <Typography variant="body2" sx={{ color: "#4a5568", fontWeight: 500 }}>
-                                    {row.dosage}
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Typography variant="body2" sx={{ color: "#1a202c", fontWeight: 500 }}>
-                                    {row.price}
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Typography variant="body2" sx={{ color: "#4a5568", fontWeight: 500 }}>
-                                    {row.markup}
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Typography variant="body2" sx={{ color: "#1a202c", fontWeight: 500 }}>
-                                    {row.stock}
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <StatusChip
-                                    label={row.status}
-                                    status={row.status}
-                                    icon={
-                                        row.status === "In Stock" ? (
-                                            <FiCheckCircle fontSize="large" />
-                                        ) : row.status === "Low Stock" ? (
-                                            <AccessTimeIcon fontSize="small" />
-                                        ) : (
-                                            <CancelOutlinedIcon fontSize="small" />
-                                        )
-                                    }
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <AntSwitch
-                                    checked={row.visibility}
-                                    size="large"
-                                />
-                            </TableCell>
-                            <TableCell align="right">
-                                <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
-                                    <IconButton size="small" sx={{ color: "#2d3748" }}>
-                                        <EditOutlinedIcon fontSize="small" />
-                                    </IconButton>
-                                    <IconButton size="small" sx={{ color: "#f56565" }}>
-                                        <DeleteOutlineIcon fontSize="small" />
-                                    </IconButton>
-                                </Box>
-                            </TableCell>
+            <StyledTableContainer component={Paper} elevation={0}>
+
+
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <HeaderCell>Medicine Name</HeaderCell>
+                            <HeaderCell>Category</HeaderCell>
+                            <HeaderCell>Dosage</HeaderCell>
+                            <HeaderCell>Price</HeaderCell>
+                            <HeaderCell>Markup</HeaderCell>
+                            <HeaderCell>Stock</HeaderCell>
+                            <HeaderCell>Status</HeaderCell>
+                            <HeaderCell>Visibility</HeaderCell>
+                            <HeaderCell align="right">Actions</HeaderCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-            <AddMedicineModal open={modalOpen} onClose={handleClose} onSubmit={handleSubmit} />
-        </StyledTableContainer>
+                    </TableHead>
+
+                    <TableBody>
+
+                        {data?.data?.map((row, index) => (
+                            <TableRow key={row?._id} sx={{ "& td": { borderBottom: "1.5px solid #f7fafc" } }}>
+                                <TableCell sx={{ py: 2 }}>
+                                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                                        <Avatar src={row?.images?.thumbnail || row?.images?.gallery[0]} sx={{ width: 40, height: 40, borderRadius: "8px" }} />
+                                        <Box>
+                                            <Typography variant="subtitle2" sx={{ fontWeight: 600, color: "#1a202c" }}>
+                                                {row?.productName}
+                                            </Typography>
+                                            <Typography variant="caption" sx={{ color: "#718096" }}>
+                                                {row?.brand}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+                                </TableCell>
+                                <TableCell>
+                                    <CategoryChip label={row?.category} />
+                                </TableCell>
+                                <TableCell>
+                                    <Typography variant="body2" sx={{ color: "#4a5568", fontWeight: 500 }}>
+                                        {row?.dosageOptions[0]?.name || "-"}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Typography variant="body2" sx={{ color: "#1a202c", fontWeight: 500 }}>
+                                        {row?.originalPrice}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Typography variant="body2" sx={{ color: "#4a5568", fontWeight: 500 }}>
+                                        {row?.markup || '-'}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Typography variant="body2" sx={{ color: "#1a202c", fontWeight: 500 }}>
+                                        {row?.stock}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <StatusChip
+                                        label={getStockLabel(row?.status)}
+                                        status={row?.status}
+                                        icon={
+                                            row?.status === "in_stock" ? (
+                                                <FiCheckCircle fontSize="large" />
+                                            ) : row.status === "Low Stock" ? (
+                                                <AccessTimeIcon fontSize="small" />
+                                            ) : (
+                                                <CancelOutlinedIcon fontSize="small" />
+                                            )
+                                        }
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <AntSwitch onChange={(event) => {
+                                        UpdateVisibility({ visibility: event.target.checked, ...row })
+                                    }}
+                                        checked={row?.visibility}
+                                        size="large"
+                                    />
+                                </TableCell>
+                                <TableCell align="right">
+                                    <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
+                                        <IconButton onClick={() => {
+                                            setEditMedicine(row);
+                                            handleOpen();
+                                        }} size="small" sx={{ color: "#2d3748" }}>
+                                            <EditOutlinedIcon fontSize="small" />
+                                        </IconButton>
+                                        <IconButton onClick={() => mutate(row?._id)} size="small" sx={{ color: "#f56565" }}>
+                                            <DeleteOutlineIcon fontSize="small" />
+                                        </IconButton>
+                                    </Box>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+
+                </Table>
+                {
+                    isLoading
+                    && <Box sx={{ display: 'flex', gap: 1, flexDirection: 'column', width: '100%' }}>
+                        <Skeleton sx={{ width: '100%' }} variant="rectangular" height={40} />
+                        <Skeleton sx={{ width: '100%' }} variant="rectangular" height={40} />
+                        <Skeleton sx={{ width: '100%' }} variant="rectangular" height={40} />
+                    </Box>}
+                <RoutePagination pagination={data?.pagination} />
+                {modalOpen && <AddMedicineModal initialData={editMedicine} open={modalOpen} onClose={handleClose} onSubmit={handleSubmit} />}
+                <AppSnackbar ref={snackbarRef} />
+            </StyledTableContainer>
+        </Box>
     )
 }

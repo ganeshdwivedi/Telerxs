@@ -1,3 +1,8 @@
 .w-md-editor-toolbar{
     background-color: #ededf0 !important;
 }
+
+.sidebar-container {
+    scrollbar-width: none !important;
+
+}

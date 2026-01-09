@@ -3,7 +3,7 @@ import { useState } from "react"
 import FooterManagementSidebar from "../components/FooterManagementSidebar"
 import FooterLogoPage from "../features/footer/FooterLogo"
 import FooterAboutUsPage from "../features/footer/AboutUs"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import Blog from "../features/footer/Blogs"
 import Contact from "../features/footer/Contact"
 import Address from "../features/footer/Adress"
@@ -26,16 +26,16 @@ const TextEditorPages = [
 
 export default function FooterManagementPage() {
     const navigate = useNavigate();
-    const [selectedPage, setSelectedPage] = useState("logo")
-
+    const [searchParams] = useSearchParams();
+    const activeTab = searchParams.get('active')
 
 
     const renderPage = () => {
-        if (TextEditorPages.includes(selectedPage)) {
+        if (TextEditorPages.includes(activeTab)) {
             return <FooterAboutUsPage />
         }
 
-        switch (selectedPage) {
+        switch (activeTab) {
             case "logo":
                 return <FooterLogoPage />
             case "blogs":
@@ -61,7 +61,7 @@ export default function FooterManagementPage() {
     return (
         <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "#F1FAFE", gap: 2 }}>
 
-            <FooterManagementSidebar selectedPageId={selectedPage} onPageSelect={handleRedirect} />
+            <FooterManagementSidebar selectedPageId={activeTab} onPageSelect={handleRedirect} />
             <Box sx={{ flex: 1, overflowY: "auto", }}>{renderPage()}</Box>
         </Box>
     )
